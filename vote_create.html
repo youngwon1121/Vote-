@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.2.6/dist/web3.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="./index.js"></script>
+    <script>
+        $(document).ready(async function () {
+            if (window.ethereum)  {
+                // console.log(ethereum.currentProviders);
+                await ethereum.enable();
+                // console.log(ethereum.selectedAddress)
+
+                account = ethereum.selectedAddress;
+                // const accounts = await ethereum.request({ method: 'eth_accounts' });
+            } else {
+                console.log('connected to local');
+                web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"))
+            }
+            web3 = new Web3(window.ethereum);
+
+
+
+            $("#addCandidatorBtn").click(function () {
+                $("#candidatorList").append("<input type=\"text\" name=\"candidator[]\" class=\"form-control mb-1\" placeholder=\"후보\">")
+            });
+        });
+
+
+        function submit() {
+            var candidatorList = [];
+            for(var i=0; i < $("input[name='candidator[]']").length; i++) {
+                var candidator = $("input[name='candidator[]']")[i].value;
+                if (candidator){
+                    candidatorList.push(candidator);
+                }
+            }
+
+            var args = [
+                $("#vote_form input[name=title]").val(),
+                candidatorList,
+                new Date($("input[name=startDateTime]").val()).getTime(),
+                new Date($("input[name=endDateTime]").val()).getTime()
+            ]
+
+            deploy(args);
+        }
+
+
+    </script>
+</head>
+<body>
+    <div class="container">
+        <form name="vote_create" id="vote_form">
+            <label for="titleInput" class="form-label">Title</label>
+            <input type="text" name="title" id="titleInput" class="form-control mb-3">
+
+            <label for="startDateInput" class="form-label">시작일자</label>
+            <input type="date" name="startDateTime" id="startDateInput" class="form-control mb-3">
+
+            <label for="endDateInput" class="form-label">종료일자</label>
+            <input type="date" name="endDateTime" id="endDateInput" class="form-control mb-3">
+
+            <label for="endDateInput" class="form-labe mb-3">후보</label>
+            <button type="button" class="btn btn-secondary" id="addCandidatorBtn">후보 추가</button>
+
+            <div id="candidatorList">
+                <input type="text" name="candidator[]" class="form-control mb-1" placeholder="후보1">
+                <input type="text" name="candidator[]" class="form-control mb-1" placeholder="후보2">
+                <input type="text" name="candidator[]" class="form-control mb-1" placeholder="후보3">
+            </div>
+        </form>
+        <button name="data" type="button" onclick="submit()" class="btn btn-primary">Click</button>
+    </div>
+
+    
+</body>
+</html>

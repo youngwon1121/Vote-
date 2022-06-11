@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.2.6/dist/web3.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+  <script src="./index.js"></script>
+  <script>
+    $(document).ready(async function () {
+      if (window.ethereum)  {
+        // console.log(ethereum.currentProviders);
+        await ethereum.enable();
+        // console.log(ethereum.selectedAddress)
+
+        account = ethereum.selectedAddress;
+        // const accounts = await ethereum.request({ method: 'eth_accounts' });
+      } else {
+        console.log('connected to local');
+        web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"))
+      }
+      web3 = new Web3(window.ethereum);
+
+      var url = new URL(window.location.href);
+      var address = url.searchParams.get("ca");
+
+      var data = await get_info(address)
+      console.log(data)
+
+      var voteSum = 0;
+      for (var i=0;i<data['candidators'].length;i++) {
+        voteSum += parseInt(data['candidators'][i]['upVote'])
+      }
+
+      var colors = ['bg-success', 'bg-info', 'bg-warning', 'bg-danger']
+      for(var i=0;i<data['candidators'].length;i++) {
+        var width = data['candidators'][i]['upVote'] / voteSum * 100
+        var color = colors[i%colors.length]
+        var html = "" +
+                "<div class=\"progress\">" +
+                "    <div class=\"progress-bar " + color + "\" role=\"progressbar\" style=\"width: "+ width +"%\" aria-valuenow=\"25\" aria-valuemin=\"0\" aria-valuemax=\"100\">12341234</div>" +
+                "</div>"
+        console.log(html)
+        $("#vote_progress").append(html);
+      }
+
+
+      $("#vote_title").text(data['title'])
+
+      var dateStr = dateFormat(new Date(parseInt(data['startDateTime']))) + " ~ " + dateFormat(new Date(parseInt(data['endDateTime'])))
+      $("#vote_date").text(dateStr)
+    });
+
+  </script>
+</head>
+<body>
+<div class="container">
+  <h1 id="vote_title"></h1>
+  <h5 id="vote_date"></h5>
+  <div id="vote_progress">
+  </div>
+</div>
+
+</body>
+</html>

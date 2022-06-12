@@ -89,13 +89,18 @@ async function upVote(address, data) {
     let abi  = await $.getJSON('./abi.json');
     let contract = new web3.eth.Contract(abi,address);
     console.log(data)
-    await contract.methods.upVote(data).send({
-        from: account
-    })
+    try {
+        await contract.methods.upVote(data).send({
+            from: account
+        })
+    } catch (e) {
+        alert('중복 투표할 수 없습니다');
+    }
+
 }
 
 function dateFormat(date) {
-    date.setUTCHours(-9);
+    // date.setUTCHours(-9);
     let month = date.getMonth() + 1;
     let day = date.getDate();
     let hour = date.getHours();

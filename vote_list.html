@@ -38,7 +38,11 @@
                 console.log(contracts_list[i]['address'])
                 var startDateTime = parseInt(vote_list[i]['startDateTime']);
                 var endDateTime = parseInt(vote_list[i]['endDateTime']);
-                var now = new Date().getTime();
+                var now = new Date();
+                // now.setUTCHours(-9);
+                now = now.getTime();
+                console.log(dateFormat(new Date(startDateTime)), dateFormat(new Date(endDateTime)), dateFormat(new Date(now)));
+                // console.log(now, )
                 var td;
 
                 if (vote_list[i]['live']) {
@@ -54,10 +58,6 @@
                 }
 
 
-                console.log(startDateTime,endDateTime)
-
-
-
                 var data = "<tr>" + 
                     "<td><a href='./vote_detail.html?ca=" + contracts_list[i]['address'] + "'>" + vote_list[i]['title'] + "</a></td>" + 
                     "<td>" + dateFormat(new Date(startDateTime)) + " ~ " + dateFormat(new Date(endDateTime))  + "</td>" +
@@ -71,7 +71,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Navbar</a>
+            <a class="navbar-brand" href="#">Voting System</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>

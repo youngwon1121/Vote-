@@ -36,7 +36,6 @@
                         '<input class="form-check-input" type="radio" id="' + data['candidators'][i]['name'] + '" name="candidator" value="' + i + '">' +
                         '<label class="form-check-label" for="candidator">' + data['candidators'][i]['name'] + '</label>' +
                     "</div>"
-                console.log(html)
                 $("#candidator").append(html);
             }
 
@@ -45,13 +44,26 @@
 
             var dateStr = dateFormat(new Date(parseInt(data['startDateTime']))) + " ~ " + dateFormat(new Date(parseInt(data['endDateTime'])))
             $("#vote_date").text(dateStr)
+
+            if (data['owner'].toUpperCase() == account.toUpperCase()) {
+                $("#button").append("<button type=\"button\" onclick=\"terminate()\" class=\"btn btn-danger\">투표 종료</button>")
+            }
+
         });
 
-        function submit() {
+        async function terminate() {
+            await finishVote(address);
+            alert('투표가 조기 종료되었습니다.');
+            location.href='vote_list.html';
+        }
+
+        async function submit() {
             var data = {
                 '_indexOfCandidator' : parseInt($("input[name=candidator]:checked").val())
             }
-            upVote(address, Object.values(data));
+            await upVote(address, Object.values(data));
+            alert('투표가 처리되었습니다.');
+            location.href='vote_list.html';
         }
     </script>
 </head>
@@ -64,7 +76,11 @@
             </div>
         </form>
 
-        <button type="button" onclick="submit()" class="btn btn-primary">Click</button>
+        <div id="button">
+            <button type="button" onclick="submit()" class="btn btn-primary">투표</button>
+
+        </div>
+
     </div>
 
 </body>

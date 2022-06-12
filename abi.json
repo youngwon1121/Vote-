@@ -142,7 +142,7 @@
 	},
 	{
 		"inputs": [],
-		"name": "getCandidatorCount1",
+		"name": "getCandidatorCount",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -171,9 +171,9 @@
 		"name": "myFunction",
 		"outputs": [
 			{
-				"internalType": "string",
-				"name": "myString",
-				"type": "string"
+				"internalType": "uint256",
+				"name": "k",
+				"type": "uint256"
 			}
 		],
 		"stateMutability": "nonpayable",

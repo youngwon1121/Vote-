@@ -33,7 +33,7 @@
         });
 
 
-        function submit() {
+        async function submit() {
             var candidatorList = [];
             for(var i=0; i < $("input[name='candidator[]']").length; i++) {
                 var candidator = $("input[name='candidator[]']")[i].value;
@@ -42,14 +42,21 @@
                 }
             }
 
+            var startDateTime = new Date($("input[name=startDateTime]").val())
+            var endDateTime = new Date($("input[name=endDateTime]").val())
+            startDateTime.setUTCHours(-9)
+            endDateTime.setUTCHours(-9)
             var args = [
                 $("#vote_form input[name=title]").val(),
                 candidatorList,
-                new Date($("input[name=startDateTime]").val()).getTime(),
-                new Date($("input[name=endDateTime]").val()).getTime()
+                startDateTime.getTime(),
+                endDateTime.getTime()
             ]
 
-            deploy(args);
+            await deploy(args);
+
+            alert('투표가 생성되었습니다.');
+            location.href = './vote_list.html'
         }
 
 

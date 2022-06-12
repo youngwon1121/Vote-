@@ -40,16 +40,20 @@
                 var endDateTime = parseInt(vote_list[i]['endDateTime']);
                 var now = new Date().getTime();
                 var td;
-                if (now > startDateTime && now < endDateTime) {
-                    td = "<td><button class='btn btn-info'>투표 진행중</button></td>"
-                } else {
-                    if (contracts_list[i]['owner_address'] == account && now > endDateTime) {
-                        td = "<td><a class='btn btn-success' href='./vote_result.html?ca=" + contracts_list[i]['address'] + "'>투표 결과 확인</a></td>"
-                    } else {
-                        td = "<td><button class='btn btn-danger'>투표 기간이 아님</button></td>"
-                    }
 
+                if (vote_list[i]['live']) {
+                    if (now > startDateTime && now < endDateTime) {
+                        td = "<td><button class='btn btn-info'>투표 진행중</button></td>"
+                    } else if (now > endDateTime) {
+                            td = "<td><a class='btn btn-success' href='./vote_result.html?ca=" + contracts_list[i]['address'] + "'>투표 결과 확인</a></td>"
+                    } else {
+                            td = "<td><button class='btn btn-danger'>투표 기간이 아님</button></td>"
+                    }
+                } else {
+                    td = "<td><a class='btn btn-success' href='./vote_result.html?ca=" + contracts_list[i]['address'] + "'>투표 결과 확인</a></td>"
                 }
+
+
                 console.log(startDateTime,endDateTime)
 
 
